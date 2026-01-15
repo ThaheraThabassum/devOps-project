@@ -1,11 +1,45 @@
 pipeline{
 agent any
-triggers{}
-environment{}
+triggers{
+  githubPush()
+}
+environment{
+  APP_NAME = 'sample_app'
+  DOCKER_IMAGE = ''
+  BRANCH = 'main'
+}
 stages{
-stage('stage name'){
-steps{}
+stage('Checkout'){
+steps{
+  git branch: "${BRANCH}",
+    url: "https://github.com/ThaheraThabassum/devOps-project.git"
 }
 }
-post{}
+stage('Build'){
+  steps{
+    sh 'echo "Build step here"'
+}
+}
+stage('Test'){
+  steps{
+    sh 'echo "Test step here"'
+  }
+}
+stage('Docker Build'){
+  steps{
+    sh 'docker build -t $DOCKER_IMAGE:ci-$BUILD_NUMBER .'
+  }
+}
+}
+post{
+  success{
+    echo 'CI successful'
+  }
+  failure{
+    echo 'CI failed'
+  }
+  always{
+    echo 'CI completed'
+  }
+}
 }
