@@ -5,7 +5,7 @@ triggers{
 }
 environment{
   APP_NAME = 'sample_app'
-  DOCKER_IMAGE = ''
+  DOCKER_IMAGE = 'thaherathabassum/sample_app'
   BRANCH = 'main'
 }
 stages{
