@@ -43,8 +43,9 @@ stage('Docker Push'){
 }
 stage('Update Manifest Repo'){
   steps{
+    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]){
     sh '''
-      git clone https://github.com/ThaheraThabassum/devops-project-manifests.git
+      git clone https://${GIT_USER}:${GIT_PASS}@github.com/ThaheraThabassum/devops-project-manifests.git
       cd devops-project-manifests/python-app
       sed -i "s|image: .*|image: $DOCKERHUB_USER/$DOCKER_IMAGE:ci-$BUILD_NUMBER|g" deployment.yaml
       git config --global user.email "thabassumthahera@gmail.com"
@@ -54,6 +55,7 @@ stage('Update Manifest Repo'){
       git push origin main
     '''
   }
+}
 }
 }
 post{
