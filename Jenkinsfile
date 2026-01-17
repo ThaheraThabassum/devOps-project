@@ -25,14 +25,6 @@ stage('Test'){
     sh 'echo "Test step here"'
   }
 }
-stage('Initialize'){
-  steps{
-    script{
-      def dockerHome = tool 'myDocker'
-      env.PATH = "${dockerHome}/bin:${env.PATH}"
-    }
-  }
-}
 stage('Docker Build'){
   steps{
     sh 'docker build -t $DOCKER_IMAGE:ci-$BUILD_NUMBER .'
