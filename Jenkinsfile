@@ -5,7 +5,7 @@ triggers{
 }
 environment{
   APP_NAME = 'sample_app'
-  DOCKER_IMAGE = 'thaherathabassum/sample_app'
+  DOCKER_IMAGE = 'python-app-image'
   BRANCH = 'main'
 }
 stages{
