@@ -30,6 +30,31 @@ stage('Docker Build'){
     sh 'docker build -t $DOCKER_IMAGE:ci-$BUILD_NUMBER .'
   }
 }
+stage('Docker Push'){
+  steps{
+    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]){
+      sh '''
+        echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
+        docker tag $DOCKER_IMAGE:ci-$BUILD_NUMBER $DOCKERHUB_USER/$DOCKER_IMAGE:ci-$BUILD_NUMBER
+        docker push $DOCKERHUB_USER/$DOCKER_IMAGE:ci-$BUILD_NUMBER
+      '''
+    }
+  }
+}
+stage('Update Manifest Repo'){
+  steps{
+    sh '''
+      git clone https://github.com/ThaheraThabassum/devops-project-manifests.git
+      cd devops-project-manifests/python-app
+      sed -i "s|image: .*|image: $DOCKERHUB_USER/$DOCKER_IMAGE:ci-$BUILD_NUMBER|g" deployment.yaml
+      git config --global user.email "thabassumthahera@gmail.com"
+      git config --global user.name "Thahera Thabassum"
+      git add deployment.yaml
+      git commit -m "Update image tag to $DOCKERHUB_USER/$DOCKER_IMAGE:ci-$BUILD_NUMBER"
+      git push origin main
+    '''
+  }
+}
 }
 post{
   success{
