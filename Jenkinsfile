@@ -13,6 +13,7 @@ stage('Checkout'){
 steps{
   git branch: "${BRANCH}",
     url: "https://github.com/ThaheraThabassum/devOps-project.git"
+    credentialsId = 'github-token'
 }
 }
 stage('Build'){
