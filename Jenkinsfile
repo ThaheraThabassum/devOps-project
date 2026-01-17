@@ -32,7 +32,7 @@ stage('Docker Build'){
 }
 stage('Docker Push'){
   steps{
-    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]){
+    withCredentials([usernamePassword(credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]){
       sh '''
         echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
         docker tag $DOCKER_IMAGE:ci-$BUILD_NUMBER $DOCKERHUB_USER/$DOCKER_IMAGE:ci-$BUILD_NUMBER
