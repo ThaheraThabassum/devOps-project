@@ -22,7 +22,12 @@ stage('Build'){
 }
 stage('Test'){
   steps{
-    sh 'echo "Test step here"'
+    sh '''
+      python3 -m venv venv
+      . venv/bin/activate
+      pip install --pip-cache-dir=.pip-cache -r requirements.txt
+      pytest tests/ --junitxml=reports/results.xml
+      '''
   }
 }
 stage('Docker Build'){
@@ -68,6 +73,7 @@ post{
   }
   always{
     echo 'CI completed'
+    junit 'reports/results.xml'
   }
 }
 }
