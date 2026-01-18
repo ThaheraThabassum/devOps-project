@@ -21,11 +21,15 @@ stage('Build'){
 }
 }
 stage('Test'){
+    agent{
+      docker{
+        image 'python:3.11-slim'
+        reuseNode true
+      }
+    }
   steps{
     sh '''
-      python3 -m venv venv
-      . venv/bin/activate
-      pip install --pip-cache-dir=.pip-cache -r requirements.txt
+      pip install -r requirements.txt
       pytest tests/ --junitxml=reports/results.xml
       '''
   }
