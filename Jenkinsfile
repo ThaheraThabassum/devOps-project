@@ -45,6 +45,7 @@ stage('Update Manifest Repo'){
   steps{
     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]){
     sh '''
+      rm -rf devops-project-manifests
       git clone https://${GIT_USER}:${GIT_PASS}@github.com/ThaheraThabassum/devops-project-manifests.git
       cd devops-project-manifests/python-app
       sed -i "s|image: .*|image: thabassumthahera/$DOCKER_IMAGE:ci-$BUILD_NUMBER|g" deployment.yaml
