@@ -72,9 +72,19 @@ stage('Update Manifest Repo'){
 post{
   success{
     echo 'CI successful'
+    emailext(
+      subject: "CI Success: Build #${BUILD_NUMBER}",
+      body: "The CI build #${BUILD_NUMBER} for ${APP_NAME} was successful.",
+      to: "thabassumthahera@gmail.com"
+    )
   }
   failure{
     echo 'CI failed'
+    emailext(
+      subject: "CI Failure: Build #${BUILD_NUMBER}",
+      body: "The CI build #${BUILD_NUMBER} for ${APP_NAME} has failed. Please check the Jenkins console output for details.",
+      to: "thabassumthahera@gmail.com"
+    )
   }
   always{
     echo 'CI completed'
