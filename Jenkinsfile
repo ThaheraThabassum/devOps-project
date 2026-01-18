@@ -30,6 +30,7 @@ stage('Test'){
   steps{
     sh '''
       pip install -r requirements.txt
+      export PYTHONPATH=$PYTHONPATH:$(pwd)
       pytest tests/ --junitxml=reports/results.xml
       '''
   }
